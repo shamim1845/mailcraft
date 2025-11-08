@@ -388,7 +388,7 @@ export function RightPanel() {
           <div>
             <div className="text-xs text-zinc-600">Platforms</div>
             <div className="mt-1 grid grid-cols-2 gap-2 text-sm">
-              {(["facebook", "twitter", "instagram", "linkedin"] as const).map(
+              {(["facebook", "twitter", "instagram", "linkedin", "youtube", "github", "tiktok", "pinterest", "snapchat"] as const).map(
                 (key) => {
                   const enabled = block.platforms.some((p) => p.key === key);
                   return (
@@ -801,7 +801,7 @@ export function RightPanel() {
           <div className="mt-1">
             <div className="mb-1 text-xs text-zinc-600">Social links</div>
             <div className="flex flex-col gap-2">
-              {(["facebook", "twitter", "instagram", "linkedin"] as const).map(
+              {(["facebook", "twitter", "instagram", "linkedin", "youtube", "github", "tiktok", "pinterest", "snapchat"] as const).map(
                 (key) => {
                   const idx = block.socials.findIndex((s) => s.key === key);
                   const present = idx >= 0;

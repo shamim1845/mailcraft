@@ -66,7 +66,7 @@ export type IconBlock = {
 export type SocialBlock = {
     id: BlockId;
     type: "social";
-    platforms: Array<{ key: "facebook" | "twitter" | "instagram" | "linkedin"; url: string }>;
+    platforms: Array<{ key: "facebook" | "twitter" | "instagram" | "linkedin" | "youtube" | "github" | "tiktok" | "pinterest" | "snapchat"; url: string }>;
     size: number;
     gap: number;
     align: Alignment;
@@ -100,7 +100,7 @@ export type FooterBlock = {
     type: "footer";
     company: string;
     address?: string;
-    socials: Array<{ key: "facebook" | "twitter" | "instagram" | "linkedin"; url: string }>;
+    socials: Array<{ key: "facebook" | "twitter" | "instagram" | "linkedin" | "youtube" | "github" | "tiktok" | "pinterest" | "snapchat"; url: string }>;
     unsubscribeText?: string;
     copyright?: string;
     bg?: string;
