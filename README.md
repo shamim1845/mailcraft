@@ -1,36 +1,80 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# MailCraft 📧
 
-## Getting Started
+A modern, drag-and-drop email builder built with Next.js. Create beautiful, responsive email templates with an intuitive visual editor.
 
-First, run the development server:
+**🔗 [Live Demo](https://mailcraft-eosin.vercel.app)** | **📦 [GitHub Repository](https://github.com/shamim1845/mailcraft)**
+
+## ✨ Features
+
+- **Visual Drag-and-Drop Builder** - Easily arrange email components with drag-and-drop
+- **Rich Text Editor** - Format text with bold, italic, underline, links, and more
+- **Multiple Block Types**: Text, Images, Buttons, Headers, Footers, Dividers, Spacers, Social Icons, Custom Icons, Multi-column layouts
+- **Color Customization** - Color pickers for backgrounds, text, and elements
+- **Image Upload** - Upload images directly or use external URLs
+- **Responsive Preview** - Switch between desktop and mobile viewports
+- **Export Options** - Export to HTML, copy to clipboard, preview, or download
+- **Undo/Redo** - Full history management for your edits
+- **Auto-Save** - Automatically saves your work to localStorage
+- **Email-Compatible HTML** - Generates HTML optimized for email clients
+
+## 🚀 Getting Started
+
+### Prerequisites
+
+- Node.js 18+
+- npm, yarn, pnpm, or bun
+
+### Installation
+
+1. Clone the repository:
+
+```bash
+git clone https://github.com/shamim1845/mailcraft.git
+cd mailcraft
+```
+
+2. Install dependencies:
+
+```bash
+npm install
+```
+
+3. Run the development server:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+4. Open [http://localhost:3000](http://localhost:3000) in your browser
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 🛠️ Technologies Used
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- **Next.js 16** - React framework
+- **React 19** - UI library
+- **TypeScript** - Type safety
+- **Tailwind CSS** - Styling
+- **Zustand** - State management
+- **TipTap** - Rich text editor
+- **@dnd-kit** - Drag and drop
+- **Lucide React** - Icons
+- **Juice** - Inline CSS for emails
+- **Radix UI** - Accessible UI primitives
 
-## Learn More
+## 📜 Available Scripts
 
-To learn more about Next.js, take a look at the following resources:
+- `npm run dev` - Start development server
+- `npm run build` - Build for production
+- `npm run start` - Start production server
+- `npm run lint` - Run ESLint
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 🎨 Usage
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+1. **Add Components**: Click on components in the left panel to add them to your email
+2. **Edit Properties**: Select a component to edit its properties in the right panel
+3. **Rearrange**: Drag and drop components to reorder them
+4. **Preview**: Use the viewport toggle to preview desktop/mobile views
+5. **Export**: Use the export options in the top bar to get your HTML
 
-## Deploy on Vercel
+---
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Built with ❤️ using Next.js and React

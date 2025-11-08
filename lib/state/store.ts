@@ -2,8 +2,8 @@
 
 import { create } from "zustand";
 import { immer } from "zustand/middleware/immer";
-import { Block, Template } from "../schema/block";
 import { nanoid } from "nanoid";
+import { Block, Template } from "../schema/block";
 import { createDefaultBlock } from "../utils/defaults";
 
 type ViewportMode = "desktop" | "mobile";
@@ -20,10 +20,8 @@ type BuilderState = {
     history: HistoryState;
     setViewport: (m: ViewportMode) => void;
     select: (id?: string) => void;
-    commit: (next: Template) => void;
     undo: () => void;
     redo: () => void;
-    load: (t: Template) => void;
     updateName: (name: string) => void;
     saveLocal: () => void;
     loadLocal: () => void;
@@ -51,15 +49,6 @@ export const useBuilderStore = create<BuilderState>()(
         history: { past: [], present: emptyTemplate, future: [] },
         setViewport: (m) => set((s) => void (s.viewport = m)),
         select: (id) => set((s) => void (s.selectedId = id)),
-        commit: (next) =>
-            set((s) => {
-                s.history.past.push(s.history.present);
-                s.history.present = next;
-                s.history.future = [];
-                try {
-                    localStorage.setItem("mailcraft:auto", JSON.stringify(s.history.present));
-                } catch { }
-            }),
         undo: () =>
             set((s) => {
                 const prev = s.history.past.pop();
@@ -76,13 +65,6 @@ export const useBuilderStore = create<BuilderState>()(
                 if (!next) return;
                 s.history.past.push(s.history.present);
                 s.history.present = next;
-                try {
-                    localStorage.setItem("mailcraft:auto", JSON.stringify(s.history.present));
-                } catch { }
-            }),
-        load: (t) =>
-            set((s) => {
-                s.history = { past: [], present: t, future: [] };
                 try {
                     localStorage.setItem("mailcraft:auto", JSON.stringify(s.history.present));
                 } catch { }

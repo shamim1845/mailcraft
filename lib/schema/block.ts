@@ -87,6 +87,8 @@ export type HeaderBlock = {
     id: BlockId;
     type: "header";
     logoUrl?: string;
+    logoWidth?: number; // max width in pixels
+    logoHeight?: number; // height in pixels (auto if not set)
     menu: Array<{ id: string; text: string; url: string }>;
     bg?: string;
     color?: string;
@@ -103,6 +105,7 @@ export type FooterBlock = {
     copyright?: string;
     bg?: string;
     color?: string;
+    padding: { top: number; right: number; bottom: number; left: number };
 };
 
 export type Block =

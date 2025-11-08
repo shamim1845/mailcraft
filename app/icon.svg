@@ -1,0 +1,14 @@
+<svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="32" height="32" rx="6" fill="#1E293B"/>
+  
+  <!-- Envelope -->
+  <path d="M8 11L16 17L24 11V21C24 21.5304 23.7893 22.0391 23.4142 22.4142C23.0391 22.7893 22.5304 23 22 23H10C9.46957 23 8.96086 22.7893 8.58579 22.4142C8.21071 22.0391 8 21.5304 8 21V11Z" fill="#3B82F6"/>
+  <path d="M8 11L16 17L24 11L16 5L8 11Z" fill="#2563EB"/>
+  
+  <!-- Builder blocks representing email components -->
+  <rect x="10" y="13" width="4" height="2" rx="0.5" fill="#FBBF24"/>
+  <rect x="10" y="16" width="6" height="2" rx="0.5" fill="#FBBF24"/>
+  <rect x="10" y="19" width="5" height="2" rx="0.5" fill="#FBBF24"/>
+</svg>
+

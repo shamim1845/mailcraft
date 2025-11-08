@@ -1,24 +1,24 @@
 "use client";
 
+import { useEffect } from "react";
 import { TopBar } from "./TopBar";
 import { LeftPanel } from "./LeftPanel";
 import { Canvas } from "./Canvas";
 import { RightPanel } from "./RightPanel";
-import { useEffect } from "react";
 import { useBuilderStore } from "../../lib/state/store";
-import dynamic from "next/dynamic";
 
 function BuilderPage() {
   const undo = useBuilderStore((s) => s.undo);
   const redo = useBuilderStore((s) => s.redo);
   const selectedId = useBuilderStore((s) => s.selectedId);
-  const updateBlock = useBuilderStore((s) => s.updateBlock);
   const deleteBlock = useBuilderStore((s) => s.deleteBlock);
-  const deleteIn = useBuilderStore((s) => s.deleteBlockInColumn);
 
+  // Keyboard shortcuts
   useEffect(() => {
     function onKey(e: KeyboardEvent) {
+      // Detect if the user is using a meta key (Windows: Ctrl, Mac: Command)
       const meta = e.ctrlKey || e.metaKey;
+
       if (meta && e.key.toLowerCase() === "z" && !e.shiftKey) {
         e.preventDefault();
         undo();
@@ -28,17 +28,12 @@ function BuilderPage() {
       ) {
         e.preventDefault();
         redo();
-      } else if (e.key === "Delete" || e.key === "Backspace") {
-        if (!selectedId) return;
-        // Try delete at root; if not found, attempt nested delete by searching columns
-        deleteBlock(selectedId);
-        // Fallback nested search
-        updateBlock("__noop__", (b: any) => b); // no-op to trigger state in case above didn't delete
       }
     }
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [undo, redo, selectedId, updateBlock, deleteBlock, deleteIn]);
+  }, [undo, redo, selectedId, deleteBlock]);
+
   return (
     <div className="flex h-screen w-screen overflow-hidden bg-zinc-100 text-zinc-900">
       <div className="fixed inset-x-0 top-0 z-20">

@@ -1,20 +1,17 @@
 "use client";
-/* eslint-disable @typescript-eslint/no-explicit-any */
 
+import { Trash2 } from "lucide-react";
 import { useBuilderStore } from "../../lib/state/store";
-import { Block } from "../../lib/schema/block";
 import { TextEditor } from "./TextEditor";
-import { useToast } from "../ui/ToastProvider";
+import { ColorPicker, PaddingSpacing, ImageUpload } from "./forms";
+import { findBlockById } from "../../lib/utils/blockUtils";
 
 export function RightPanel() {
   const selectedId = useBuilderStore((s) => s.selectedId);
   const blocks = useBuilderStore((s) => s.history.present.blocks);
   const updateBlock = useBuilderStore((s) => s.updateBlock);
-  const { notify } = useToast();
 
-  const block = blocks.find((b) => (b as Block).id === selectedId) as
-    | Block
-    | undefined;
+  const block = findBlockById(blocks, selectedId || "");
 
   if (!block) {
     return (
@@ -56,20 +53,13 @@ export function RightPanel() {
                 }
               />
             </div>
-            <div>
-              <label className="text-xs text-zinc-600">Color</label>
-              <input
-                type="color"
-                className="h-8 w-full rounded border border-zinc-200"
-                value={block.color}
-                onChange={(e) =>
-                  updateBlock(block.id, (b: any) => ({
-                    ...b,
-                    color: e.target.value,
-                  }))
-                }
-              />
-            </div>
+            <ColorPicker
+              label="Color"
+              value={block.color}
+              onChange={(color) =>
+                updateBlock(block.id, (b: any) => ({ ...b, color }))
+              }
+            />
           </div>
           <div className="grid grid-cols-2 gap-2">
             <div>
@@ -110,24 +100,13 @@ export function RightPanel() {
               </select>
             </div>
           </div>
-          <div className="grid grid-cols-4 gap-2">
-            {(["top", "right", "bottom", "left"] as const).map((side) => (
-              <div key={side}>
-                <label className="text-xs text-zinc-600">Padding {side}</label>
-                <input
-                  type="number"
-                  className="w-full rounded border border-zinc-200 p-1 text-sm"
-                  value={block.padding[side]}
-                  onChange={(e) =>
-                    updateBlock(block.id, (b: any) => ({
-                      ...b,
-                      padding: { ...b.padding, [side]: Number(e.target.value) },
-                    }))
-                  }
-                />
-              </div>
-            ))}
-          </div>
+          <PaddingSpacing
+            label="Padding"
+            value={block.padding}
+            onChange={(padding) =>
+              updateBlock(block.id, (b: any) => ({ ...b, padding }))
+            }
+          />
         </div>
       )}
       {block.type === "image" && (
@@ -148,16 +127,10 @@ export function RightPanel() {
               updateBlock(block.id, (b: any) => ({ ...b, alt: e.target.value }))
             }
           />
-          <label className="text-xs text-zinc-600">Upload image</label>
-          <input
-            type="file"
-            accept="image/*"
-            onChange={(e) => {
-              const f = e.target.files?.[0];
-              if (!f) return;
-              const url = URL.createObjectURL(f);
-              updateBlock(block.id, (b: any) => ({ ...b, url }));
-              notify("Image loaded locally");
+          <ImageUpload
+            label="Upload image"
+            onUpload={(dataUrl) => {
+              updateBlock(block.id, (b: any) => ({ ...b, url: dataUrl }));
             }}
           />
           <div className="grid grid-cols-2 gap-2">
@@ -219,32 +192,13 @@ export function RightPanel() {
             }
           />
 
-          <div>
-            <label className="text-xs text-zinc-600">Padding</label>
-            <div className="grid grid-cols-4 gap-2">
-              {(["top", "right", "bottom", "left"] as const).map((side) => (
-                <div key={side}>
-                  <label className="text-xs text-zinc-600">
-                    {side.charAt(0).toUpperCase() + side.slice(1)}
-                  </label>
-                  <input
-                    type="number"
-                    className="w-full rounded border border-zinc-200 p-1 text-sm"
-                    value={block.padding[side]}
-                    onChange={(e) =>
-                      updateBlock(block.id, (b: any) => ({
-                        ...b,
-                        padding: {
-                          ...b.padding,
-                          [side]: Number(e.target.value),
-                        },
-                      }))
-                    }
-                  />
-                </div>
-              ))}
-            </div>
-          </div>
+          <PaddingSpacing
+            label="Padding"
+            value={block.padding}
+            onChange={(padding) =>
+              updateBlock(block.id, (b: any) => ({ ...b, padding }))
+            }
+          />
         </div>
       )}
       {block.type === "button" && (
@@ -269,34 +223,20 @@ export function RightPanel() {
             }
           />
           <div className="grid grid-cols-2 gap-2">
-            <div>
-              <label className="text-xs text-zinc-600">Background</label>
-              <input
-                type="color"
-                className="h-8 w-full rounded border border-zinc-200"
-                value={block.bg}
-                onChange={(e) =>
-                  updateBlock(block.id, (b: any) => ({
-                    ...b,
-                    bg: e.target.value,
-                  }))
-                }
-              />
-            </div>
-            <div>
-              <label className="text-xs text-zinc-600">Text color</label>
-              <input
-                type="color"
-                className="h-8 w-full rounded border border-zinc-200"
-                value={block.color}
-                onChange={(e) =>
-                  updateBlock(block.id, (b: any) => ({
-                    ...b,
-                    color: e.target.value,
-                  }))
-                }
-              />
-            </div>
+            <ColorPicker
+              label="Background"
+              value={block.bg}
+              onChange={(bg) =>
+                updateBlock(block.id, (b: any) => ({ ...b, bg }))
+              }
+            />
+            <ColorPicker
+              label="Text color"
+              value={block.color}
+              onChange={(color) =>
+                updateBlock(block.id, (b: any) => ({ ...b, color }))
+              }
+            />
           </div>
           <div className="grid grid-cols-2 gap-2">
             <div>
@@ -395,20 +335,13 @@ export function RightPanel() {
                 }
               />
             </div>
-            <div>
-              <label className="text-xs text-zinc-600">Color</label>
-              <input
-                type="color"
-                className="h-8 w-full rounded border border-zinc-200"
-                value={block.color}
-                onChange={(e) =>
-                  updateBlock(block.id, (b: any) => ({
-                    ...b,
-                    color: e.target.value,
-                  }))
-                }
-              />
-            </div>
+            <ColorPicker
+              label="Color"
+              value={block.color}
+              onChange={(color) =>
+                updateBlock(block.id, (b: any) => ({ ...b, color }))
+              }
+            />
           </div>
           <label className="text-xs text-zinc-600">Style</label>
           <select
@@ -425,36 +358,13 @@ export function RightPanel() {
             <option value="dashed">Dashed</option>
             <option value="dotted">Dotted</option>
           </select>
-          <div className="grid grid-cols-2 gap-2">
-            <div>
-              <label className="text-xs text-zinc-600">Padding top</label>
-              <input
-                type="number"
-                className="w-full rounded border border-zinc-200 p-1 text-sm"
-                value={block.padding.top}
-                onChange={(e) =>
-                  updateBlock(block.id, (b: any) => ({
-                    ...b,
-                    padding: { ...b.padding, top: Number(e.target.value) },
-                  }))
-                }
-              />
-            </div>
-            <div>
-              <label className="text-xs text-zinc-600">Padding bottom</label>
-              <input
-                type="number"
-                className="w-full rounded border border-zinc-200 p-1 text-sm"
-                value={block.padding.bottom}
-                onChange={(e) =>
-                  updateBlock(block.id, (b: any) => ({
-                    ...b,
-                    padding: { ...b.padding, bottom: Number(e.target.value) },
-                  }))
-                }
-              />
-            </div>
-          </div>
+          <PaddingSpacing
+            label="Padding"
+            value={block.padding}
+            onChange={(padding) =>
+              updateBlock(block.id, (b: any) => ({ ...b, padding }))
+            }
+          />
         </div>
       )}
       {block.type === "spacer" && (
@@ -592,48 +502,39 @@ export function RightPanel() {
             <option value="square">Square</option>
             <option value="star">Star</option>
           </select>
-          <div className="grid grid-cols-3 gap-2">
-            <div>
-              <label className="text-xs text-zinc-600">Size</label>
-              <input
-                type="number"
-                className="w-full rounded border border-zinc-200 p-1 text-sm"
-                value={(block as any).size}
-                onChange={(e) =>
-                  updateBlock(block.id, (b: any) => ({
-                    ...b,
-                    size: Number(e.target.value),
-                  }))
-                }
-              />
-            </div>
-            <div>
-              <label className="text-xs text-zinc-600">Color</label>
-              <input
-                type="color"
-                className="h-8 w-full rounded border border-zinc-200"
-                value={(block as any).color}
-                onChange={(e) =>
-                  updateBlock(block.id, (b: any) => ({
-                    ...b,
-                    color: e.target.value,
-                  }))
-                }
-              />
-            </div>
-            <div>
-              <label className="text-xs text-zinc-600">Link URL</label>
-              <input
-                className="w-full rounded border border-zinc-200 p-1 text-sm"
-                value={(block as any).url ?? ""}
-                onChange={(e) =>
-                  updateBlock(block.id, (b: any) => ({
-                    ...b,
-                    url: e.target.value,
-                  }))
-                }
-              />
-            </div>
+          <div>
+            <label className="text-xs text-zinc-600">Size</label>
+            <input
+              type="number"
+              className="w-full rounded border border-zinc-200 p-1 text-sm"
+              value={(block as any).size}
+              onChange={(e) =>
+                updateBlock(block.id, (b: any) => ({
+                  ...b,
+                  size: Number(e.target.value),
+                }))
+              }
+            />
+          </div>
+          <ColorPicker
+            label="Color"
+            value={(block as any).color || "#000000"}
+            onChange={(color) =>
+              updateBlock(block.id, (b: any) => ({ ...b, color }))
+            }
+          />
+          <div>
+            <label className="text-xs text-zinc-600">Link URL</label>
+            <input
+              className="w-full rounded border border-zinc-200 p-1 text-sm"
+              value={(block as any).url ?? ""}
+              onChange={(e) =>
+                updateBlock(block.id, (b: any) => ({
+                  ...b,
+                  url: e.target.value,
+                }))
+              }
+            />
           </div>
         </div>
       )}
@@ -707,16 +608,11 @@ export function RightPanel() {
               </div>
             ))}
           </div>
-          <label className="text-xs text-zinc-600">Background</label>
-          <input
-            type="color"
-            className="h-8 w-full rounded border border-zinc-200"
+          <ColorPicker
+            label="Background"
             value={block.background ?? "#ffffff"}
-            onChange={(e) =>
-              updateBlock(block.id, (b: any) => ({
-                ...b,
-                background: e.target.value,
-              }))
+            onChange={(background) =>
+              updateBlock(block.id, (b: any) => ({ ...b, background }))
             }
           />
           <label className="text-xs text-zinc-600">Gap</label>
@@ -731,64 +627,13 @@ export function RightPanel() {
               }))
             }
           />
-          <div className="grid grid-cols-2 gap-2">
-            <div>
-              <label className="text-xs text-zinc-600">Padding top</label>
-              <input
-                type="number"
-                className="w-full rounded border border-zinc-200 p-1 text-sm"
-                value={block.padding.top}
-                onChange={(e) =>
-                  updateBlock(block.id, (b: any) => ({
-                    ...b,
-                    padding: { ...b.padding, top: Number(e.target.value) },
-                  }))
-                }
-              />
-            </div>
-            <div>
-              <label className="text-xs text-zinc-600">Padding right</label>
-              <input
-                type="number"
-                className="w-full rounded border border-zinc-200 p-1 text-sm"
-                value={block.padding.right}
-                onChange={(e) =>
-                  updateBlock(block.id, (b: any) => ({
-                    ...b,
-                    padding: { ...b.padding, right: Number(e.target.value) },
-                  }))
-                }
-              />
-            </div>
-            <div>
-              <label className="text-xs text-zinc-600">Padding bottom</label>
-              <input
-                type="number"
-                className="w-full rounded border border-zinc-200 p-1 text-sm"
-                value={block.padding.bottom}
-                onChange={(e) =>
-                  updateBlock(block.id, (b: any) => ({
-                    ...b,
-                    padding: { ...b.padding, bottom: Number(e.target.value) },
-                  }))
-                }
-              />
-            </div>
-            <div>
-              <label className="text-xs text-zinc-600">Padding left</label>
-              <input
-                type="number"
-                className="w-full rounded border border-zinc-200 p-1 text-sm"
-                value={block.padding.left}
-                onChange={(e) =>
-                  updateBlock(block.id, (b: any) => ({
-                    ...b,
-                    padding: { ...b.padding, left: Number(e.target.value) },
-                  }))
-                }
-              />
-            </div>
-          </div>
+          <PaddingSpacing
+            label="Padding"
+            value={block.padding}
+            onChange={(padding) =>
+              updateBlock(block.id, (b: any) => ({ ...b, padding }))
+            }
+          />
         </div>
       )}
       {block.type === "header" && (
@@ -804,6 +649,53 @@ export function RightPanel() {
               }))
             }
           />
+          <ImageUpload
+            label="Upload logo"
+            onUpload={(dataUrl) => {
+              updateBlock(block.id, (b: any) => ({
+                ...b,
+                logoUrl: dataUrl,
+              }));
+            }}
+          />
+          <div className="grid grid-cols-2 gap-2">
+            <div>
+              <label className="text-xs text-zinc-600">Max Width (px)</label>
+              <input
+                type="number"
+                className="w-full rounded border border-zinc-200 p-1 text-sm"
+                value={block.logoWidth ?? 200}
+                min="50"
+                max="600"
+                onChange={(e) =>
+                  updateBlock(block.id, (b: any) => ({
+                    ...b,
+                    logoWidth: Number(e.target.value) || 200,
+                  }))
+                }
+              />
+            </div>
+            <div>
+              <label className="text-xs text-zinc-600">
+                Height (px, optional)
+              </label>
+              <input
+                type="number"
+                className="w-full rounded border border-zinc-200 p-1 text-sm"
+                value={block.logoHeight ?? ""}
+                min="20"
+                placeholder="Auto"
+                onChange={(e) =>
+                  updateBlock(block.id, (b: any) => ({
+                    ...b,
+                    logoHeight: e.target.value
+                      ? Number(e.target.value)
+                      : undefined,
+                  }))
+                }
+              />
+            </div>
+          </div>
           <div className="mt-1">
             <div className="mb-1 text-xs text-zinc-600">Menu</div>
             <div className="flex flex-col gap-2">
@@ -832,15 +724,16 @@ export function RightPanel() {
                     }
                   />
                   <button
-                    className="rounded border border-red-200 px-2 py-1 text-xs text-red-600"
+                    className="flex items-center justify-center rounded border border-red-200 px-2 py-1 text-red-600 hover:bg-red-50 transition-colors"
                     onClick={() =>
                       updateBlock(block.id, (b: any) => ({
                         ...b,
                         menu: b.menu.filter((_: any, i: number) => i !== idx),
                       }))
                     }
+                    title="Remove item"
                   >
-                    Remove
+                    <Trash2 size={14} />
                   </button>
                 </div>
               ))}
@@ -860,25 +753,23 @@ export function RightPanel() {
               </button>
             </div>
           </div>
-          <label className="text-xs text-zinc-600">Background</label>
-          <input
-            type="color"
-            className="h-8 w-full rounded border border-zinc-200"
+          <ColorPicker
+            label="Background"
             value={block.bg ?? "#ffffff"}
-            onChange={(e) =>
-              updateBlock(block.id, (b: any) => ({ ...b, bg: e.target.value }))
+            onChange={(bg) => updateBlock(block.id, (b: any) => ({ ...b, bg }))}
+          />
+          <ColorPicker
+            label="Text color"
+            value={block.color ?? "#111111"}
+            onChange={(color) =>
+              updateBlock(block.id, (b: any) => ({ ...b, color }))
             }
           />
-          <label className="text-xs text-zinc-600">Text color</label>
-          <input
-            type="color"
-            className="h-8 w-full rounded border border-zinc-200"
-            value={block.color ?? "#111111"}
-            onChange={(e) =>
-              updateBlock(block.id, (b: any) => ({
-                ...b,
-                color: e.target.value,
-              }))
+          <PaddingSpacing
+            label="Padding"
+            value={block.padding}
+            onChange={(padding) =>
+              updateBlock(block.id, (b: any) => ({ ...b, padding }))
             }
           />
         </div>
@@ -979,25 +870,36 @@ export function RightPanel() {
               }))
             }
           />
-          <label className="text-xs text-zinc-600">Background</label>
+          <label className="text-xs text-zinc-600">Copyright</label>
           <input
-            type="color"
-            className="h-8 w-full rounded border border-zinc-200"
-            value={block.bg ?? "#f4f4f5"}
-            onChange={(e) =>
-              updateBlock(block.id, (b: any) => ({ ...b, bg: e.target.value }))
-            }
-          />
-          <label className="text-xs text-zinc-600">Text color</label>
-          <input
-            type="color"
-            className="h-8 w-full rounded border border-zinc-200"
-            value={block.color ?? "#111111"}
+            className="w-full rounded border border-zinc-200 p-1 text-sm"
+            value={block.copyright ?? ""}
             onChange={(e) =>
               updateBlock(block.id, (b: any) => ({
                 ...b,
-                color: e.target.value,
+                copyright: e.target.value,
               }))
+            }
+          />
+          <ColorPicker
+            label="Background"
+            value={block.bg ?? "#f4f4f5"}
+            onChange={(bg) => updateBlock(block.id, (b: any) => ({ ...b, bg }))}
+          />
+          <ColorPicker
+            label="Text color"
+            value={block.color ?? "#111111"}
+            onChange={(color) =>
+              updateBlock(block.id, (b: any) => ({ ...b, color }))
+            }
+          />
+          <PaddingSpacing
+            label="Padding"
+            value={
+              block.padding || { top: 12, right: 12, bottom: 12, left: 12 }
+            }
+            onChange={(padding) =>
+              updateBlock(block.id, (b: any) => ({ ...b, padding }))
             }
           />
         </div>

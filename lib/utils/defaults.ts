@@ -138,6 +138,8 @@ export function createDefaultBlock(key: string): Block {
                 id: nanoid(),
                 type: "header",
                 logoUrl: "",
+                logoWidth: 200,
+                logoHeight: undefined,
                 menu: [
                     { id: nanoid(), text: "Home", url: "#" },
                     { id: nanoid(), text: "About", url: "#" },
@@ -162,6 +164,7 @@ export function createDefaultBlock(key: string): Block {
                 copyright: `© ${new Date().getFullYear()} Company Inc.`,
                 bg: "#f4f4f5",
                 color: "#111111",
+                padding: { top: 12, right: 12, bottom: 12, left: 12 },
             };
             return b;
         }

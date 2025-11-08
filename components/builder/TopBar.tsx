@@ -20,6 +20,7 @@ export function TopBar() {
   const template = useBuilderStore((s) => s.history.present);
   const { notify } = useToast();
 
+  // Load local template on mount
   useEffect(() => {
     loadLocal();
   }, [loadLocal]);
@@ -57,50 +58,59 @@ export function TopBar() {
       </div>
       <div className="ml-auto flex items-center gap-2">
         <button
-          className="rounded border border-zinc-200 px-2 py-1 text-sm"
+          className="rounded border border-zinc-200 px-2 py-1 text-sm transition-colors hover:bg-zinc-50"
           onClick={undo}
+          title="Undo (Ctrl+Z)"
         >
           Undo
         </button>
         <button
-          className="rounded border border-zinc-200 px-2 py-1 text-sm"
+          className="rounded border border-zinc-200 px-2 py-1 text-sm transition-colors hover:bg-zinc-50"
           onClick={redo}
+          title="Redo (Ctrl+Y or Ctrl+Shift+Z)"
         >
           Redo
         </button>
         <button
-          className="rounded border border-zinc-200 px-2 py-1 text-sm"
+          className="rounded border border-zinc-200 px-2 py-1 text-sm transition-colors hover:bg-zinc-50"
           onClick={() => {
             const html = renderTemplateToHtml(template);
             openPreview(html);
             notify("Opened preview in new tab");
           }}
+          title="Preview email in new tab"
         >
           Preview
         </button>
         <button
-          className="rounded border border-zinc-200 px-2 py-1 text-sm"
+          className="rounded border border-zinc-200 px-2 py-1 text-sm transition-colors hover:bg-zinc-50"
           onClick={async () => {
             const html = renderTemplateToHtml(template);
             const ok = await copyHtmlToClipboard(html);
             notify(ok ? "Copied HTML to clipboard" : "Copy failed");
           }}
+          title="Copy HTML to clipboard"
         >
           Copy HTML
         </button>
         <button
-          className="rounded border border-zinc-200 px-2 py-1 text-sm"
-          onClick={saveLocal}
+          className="rounded border border-zinc-200 px-2 py-1 text-sm transition-colors hover:bg-zinc-50"
+          onClick={() => {
+            saveLocal();
+            notify("Template saved");
+          }}
+          title="Save template to browser storage"
         >
           Save
         </button>
         <button
-          className="rounded bg-zinc-900 px-3 py-1 text-sm text-white"
+          className="rounded bg-zinc-900 px-3 py-1 text-sm text-white transition-colors hover:bg-zinc-800"
           onClick={() => {
             const html = renderTemplateToHtml(template);
             downloadHtmlFile(template.name || "email", html);
             notify("Downloaded HTML file");
           }}
+          title="Export email as HTML file"
         >
           Export HTML
         </button>
